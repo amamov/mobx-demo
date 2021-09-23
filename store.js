@@ -3,6 +3,7 @@ const { observable, action } = require("mobx");
 const postStore = observable({
   data: [],
   addPost(data) {
+    // action이 이미 감싸져 있음 (observable 감싸져 있기 때문)
     this.data.push(data);
   },
   get postLength() {
