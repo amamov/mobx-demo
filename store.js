@@ -6,7 +6,7 @@ const postStore = observable({
     this.data.push(data);
   },
   get postLength() {
-    return this.data.length;
+    return this.data.length; // computed
   },
 });
 
