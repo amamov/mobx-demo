@@ -2,6 +2,8 @@ import React, { useCallback } from "react";
 import { observer, useLocalObservable } from "mobx-react";
 import useStore from "./useStore";
 
+// https://mobx-react.js.org/state-outsourcing : Props들을 observable로 바꿔주는 법
+
 function App() {
   // useStore을 사용하지 않고 그냥 import에서 바로 불러와서 사용해도 된다.
   const { userStore, postStore } = useStore();
