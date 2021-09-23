@@ -1,4 +1,4 @@
-// // 레거시 코드
+// // Context로 묶어서 사용도 가능
 // import * as React from "react";
 // import { userStore, postStore } from "./store";
 

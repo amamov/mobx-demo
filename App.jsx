@@ -3,6 +3,7 @@ import { observer, useLocalObservable } from "mobx-react";
 import useStore from "./useStore";
 
 function App() {
+  // useStore을 사용하지 않고 그냥 import에서 바로 불러와서 사용해도 된다.
   const { userStore, postStore } = useStore();
 
   const localState = useLocalObservable(() => ({
