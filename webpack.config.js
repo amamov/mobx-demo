@@ -2,7 +2,7 @@ const path = require("path");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 module.exports = {
-  name: "lotto-dev",
+  name: "mobx-demo",
   mode: "development",
   devtool: "eval",
   resolve: {
