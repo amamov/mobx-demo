@@ -1,29 +1,37 @@
 import React, { useCallback } from "react";
 import { observer, useLocalObservable } from "mobx-react";
-import useStore from "./useStore";
-
-// https://mobx-react.js.org/state-outsourcing : Props들을 observable로 바꿔주는 법
+import useStore from "./stores/useStore";
+import AppView from "./AppView";
 
 function App() {
-  // useStore을 사용하지 않고 그냥 import에서 바로 불러와서 사용해도 된다.
-  const { userStore, postStore } = useStore();
+  //* State Dependency Injection (State 의존성 주입)
+  const { userStore } = useStore();
 
   const localState = useLocalObservable(() => ({
-    name: "",
-    password: "",
-    handleChangeName(e) {
-      this.name = e.target.value;
+    //* local observable state
+    currentName: "",
+    currentPassword: "",
+
+    //* action
+    handleChangeName(event) {
+      this.currentName = event.target.value;
     },
-    handleChangePassword(e) {
-      this.password = e.target.value;
+    handleChangePassword(event) {
+      this.currentPassword = event.target.value;
     },
   }));
 
   const handleLogInClick = useCallback(() => {
-    userStore.logIn({
-      nickname: "amamov",
-      password: "비밀번호",
-    });
+    const name = localState.currentName;
+    const password = localState.currentPassword;
+    if (name && password) {
+      userStore.logIn({
+        name,
+        password,
+      });
+    } else {
+      alert("이름과 비밀번호를 입력해주세요. (아무거나 작성 가능)");
+    }
   }, []);
 
   const handleLogOutClick = useCallback(() => {
@@ -31,27 +39,19 @@ function App() {
   }, []);
 
   return (
-    <main>
-      {userStore.isLoggingIn ? (
-        <div>로그인 중</div>
-      ) : userStore.data ? (
-        <div>{userStore.data.nickname}</div>
-      ) : (
-        "로그인 해주세요."
-      )}
-      {!userStore.data ? (
-        <button onClick={handleLogInClick}>로그인</button>
-      ) : (
-        <button onClick={handleLogOutClick}>로그아웃</button>
-      )}
-      <div>{postStore.postLength}</div>
-      <input value={localState.name} onChange={localState.handleChangeName} />
-      <input
-        value={localState.password}
-        type="password"
-        onChange={localState.handleChangePassword}
-      />
-    </main>
+    <AppView
+      currentName={localState.currentName}
+      currentPassword={localState.currentPassword}
+      handleChangeName={localState.handleChangeName}
+      handleChangePassword={localState.handleChangePassword}
+      isLoggingIn={userStore.isLoggingIn}
+      isAuthenticated={userStore.isAuthenticated}
+      loggingCount={userStore.loggingCount}
+      user={userStore.user}
+      helloUser={userStore.helloUser}
+      handleLogInClick={handleLogInClick}
+      handleLogOutClick={handleLogOutClick}
+    />
   );
 }
 
